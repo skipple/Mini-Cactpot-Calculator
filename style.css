@@ -11,12 +11,13 @@
 
 .arrow-header {
     text-align: center;
-    font-size: 8px;
+    font-size: 15px;
 }
 
 input {
     width: 15px;
     text-align: center;
+    font-size: 20px;
 }
 
 input::-webkit-outer-spin-button,
