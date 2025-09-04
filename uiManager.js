@@ -9,6 +9,7 @@
 class UIManager {
   constructor() {
     this.minimumInputs = 4;
+    this.maxInputs = 4;
     this.initializeElements();
     this.setupEventListeners();
   }
@@ -127,8 +128,8 @@ class UIManager {
       }
     });
 
-    // If minimum fields are filled, disable all empty fields
-    if (filledCount >= this.minimumInputs) {
+    // If maximum fields are filled, disable all empty fields
+    if (filledCount >= this.maxInputs) {
       allInputs.forEach(input => {
         if (input.value.trim() === '') {
           input.disabled = true;
@@ -136,7 +137,7 @@ class UIManager {
         }
       });
     } else {
-      // If less than minimum fields are filled, enable all fields
+      // If less than maximum fields are filled, enable all fields
       allInputs.forEach(input => {
         input.disabled = false;
         input.classList.remove('disabled');
