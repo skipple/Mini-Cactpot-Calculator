@@ -15,8 +15,8 @@ function handleCalculate() {
     [0, 3, 6], // col 1
     [1, 4, 7], // col 2
     [2, 5, 8], // col 3
-    [0, 4, 8], // diag top-left to bottom-right
-    [2, 4, 6]  // diag top-right to bottom-left
+    [0, 4, 8], // diag top-left
+    [2, 4, 6]  // diag top-right
   ];
   
   // grab values from the grid
@@ -34,15 +34,22 @@ function handleCalculate() {
   const allNumbers = [1,2,3,4,5,6,7,8,9]
   const availableNumbers = allNumbers.filter(item => !takenNumbers.includes(item));
 
-  for (let i = 0; i <= 8, i++){
-    let optionEV = calculateOptionEV(optionValues[i], availableNumbers);
-  }
-
   const resultDiv = document.getElementById("result");
   resultDiv.textContent = JSON.stringify(optionValues);
 
+  const evs = optionValues.map(option => calculateOptionEV(option, availableNumbers));
+  const maxEV = Math.max(...evs);
+  const bestOptions = evs
+    .map((ev, index) => ({ ev, index }))
+    .filter(item => item.ev === maxEV)
+    .map(item => options[item.index]);
+
+  // display the best options and their expected EV
+  resultDiv.textContent = `Best Options: ${JSON.stringify(bestOptions)}, Expected EV: ${maxEV.toFixed(2)} gil`;
+
 }
 
+// returns the gil value for a given total
 function gilValue(total){
   const valueToGil = {
     6:10000,
@@ -70,17 +77,32 @@ function gilValue(total){
 }
 
 function calculateOptionEV(optionValues, availableNumbers) {
-  // to do:
   // find the null values in the optionValues set
+  const nullCount = optionValues.filter(item => item === null).length;
+
   // if no null values exists, simply return the sole gilValue as the EV.
-  // else, for the number of null values that exists, itterate through all possible unique comindations of available numbers
-    // Take the first null position.
-    // For each number in availableNumbers:
-      // Create a copy of optionValues with that null filled in.
-      // Create a copy of availableNumbers without that number.
-      // Call the same function again to fill the next null.
-      // Base case: when no nulls remain, evaluate the gil value.
-  // add these combinations to a new array
-  // for each item in the array, total them, and call gilValue. Store the resulting gil values in a new array
-  // return the total gilValue devided by the number of values as the EV.
+  if (nullCount === 0) {
+    const total = optionValues.reduce((sum, val) => sum + val, 0);
+    return gilValue(total);
+  }
+
+  // if null values exist, we need to calculate the EV across all possible combinations
+  else {
+    // find the index of the first null value
+    const nullIndex = optionValues.indexOf(null);
+    let evTotal = 0;
+    let combinationCount = 0;
+    // iterate through all available numbers, substituting each one in turn and recursively calculating the EV
+    for (let i = 0; i < availableNumbers.length; i++) {
+      const number = availableNumbers[i];
+      const newOptionValues = [...optionValues];
+      newOptionValues[nullIndex] = number;
+      const newAvailableNumbers = availableNumbers.filter((_, index) => index !== i);
+      // recursively calculate the EV for this new set of option values
+      const ev = calculateOptionEV(newOptionValues, newAvailableNumbers);
+      evTotal += ev;
+      combinationCount++;
+    }
+    return evTotal / combinationCount;
+  }
 }
