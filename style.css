@@ -30,6 +30,13 @@ body {
     text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.3), 1px -1px 0 rgba(255, 255, 255, 0.3), -1px 1px 0 rgba(255, 255, 255, 0.3), 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
 
+.header h1 {
+    font-weight: 400;
+    font-size: 40px;
+    margin: 0;
+}
+
+
 .cacpot-container {
     display: flex;
     padding: 2vh 5vh;
@@ -82,15 +89,20 @@ body {
     margin-top: 20px;
     font-family: "Oswald", sans-serif;
     font-weight: 350;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 button {
     font-family: "Oswald", sans-serif;
     font-weight: 350;
-    font-size: 20px;
+    font-size: 30px;
     color: #863030;
+    background-image: url('assets/hidden_cactpot_node.png');
     text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.3), 1px -1px 0 rgba(255, 255, 255, 0.3), -1px 1px 0 rgba(255, 255, 255, 0.3), 1px 1px 0 rgba(255, 255, 255, 0.3);
+    background-repeat: no-repeat;
+    background-position: center;
+    border: #b6b6b6;
+    background-color: transparent;
 }
 
 .num-input {
