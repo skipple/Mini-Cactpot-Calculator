@@ -7,53 +7,65 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Skipple's Cacpot Calculator</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Oswald:wght@200..700&display=swap"
+    rel="stylesheet">
 
 </head>
 
 <body>
-
+  <div class="header">
+    <h1>Skipple's FFXIV Mini Cacpot Calculator</h1>
+  </div>  
 
   <div class="container">
-    <div class="header">
-      <h1>Skipple's FFXIV Mini Cacpot Calculator</h1>
-    </div>
+    
 
 
     <div class="cacpot-container">
       <table class="cacpot-table">
-        <tr class="arrow-header">
-          <td id="diag-top-left">1 ↘</td>
-          <td id="column-1">2 ↓</td>
-          <td id="column-2">3 ↓</td>
-          <td id="column-3">4 ↓</td>
-          <td id="diag-top-right"> 5 ↙</td>
+        <tr class="arrow">
+          <td class="arrow diag-left-arrow" id="diag-left"></td>
+          <td class="arrow down-arrow" id="column-1"></td>
+          <td class="arrow down-arrow" id="column-2"></td>
+          <td class="arrow down-arrow" id="column-3"></td>
+          <td class="arrow diag-right-arrow" id="diag-right"></td>
         </tr>
         <tr id="row-1">
-          <td class="arrow-header" id="row-1">6 →</td>
-          <td id="num-1"><input type="number" id="num-1-entry" max="9"></td>
-          <td id="num-2"><input type="number" id="num-2-entry" max="9"></td>
-          <td id="num-3"><input type="number" id="num-3-entry" max="9"></td>
+          <td class="arrow right-arrow" id="row-1"></td>
+          <td class="num-input" id="num-1"><input type="number" id="num-1-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-2"><input type="number" id="num-2-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-3"><input type="number" id="num-3-entry" min="1" max="9"></td>
         </tr>
         <tr id="row-2">
-          <td class="arrow-header" id="row-2">7 →</td>
-          <td id="num-4"><input type="number" id="num-4-entry" max="9"></td>
-          <td id="num-5"><input type="number" id="num-5-entry" max="9"></td>
-          <td id="num-6"><input type="number" id="num-6-entry" max="9"></td>
+          <td class="arrow right-arrow" id="row-2"></td>
+          <td class="num-input" id="num-4"><input type="number" id="num-4-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-5"><input type="number" id="num-5-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-6"><input type="number" id="num-6-entry" min="1" max="9"></td>
         </tr>
         <tr id="row-3">
-          <td class="arrow-header" id="row-3">8 →</td>
-          <td id="num-7"><input type="number" id="num-7-entry" max="9"></td>
-          <td id="num-8"><input type="number" id="num-8-entry" max="9"></td>
-          <td id="num-9"><input type="number" id="num-9-entry" max="9"></td>
+          <td class="arrow right-arrow" id="row-3"></td>
+          <td class="num-input" id="num-7"><input type="number" id="num-7-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-8"><input type="number" id="num-8-entry" min="1" max="9"></td>
+          <td class="num-input" id="num-9"><input type="number" id="num-9-entry" min="1" max="9"></td>
         </tr>
       </table>
-    </div>
 
-    <div class="result"><button id="calculate-btn">Calculate Best Line</button>
-      <div id="result">Test</div>
+      <div class="result-container">
+        <button id="reset-btn">Reset</button>
+        <div id="result">
+          <div id="best-options"></div>
+          <div id="expected-value"></div>
+        </div>
+      </div>
     </div>
 
   </div>
+
+  <footer>
+    <p>FINAL FANTASY XIV and related assets are property of Square Enix Holdings Co., Ltd. This is a fan-made tool and
+      is not affiliated with or endorsed by Square Enix.</p>
+  </footer>
+
   <script src="cactpot-calc.js"></script>
 </body>
 

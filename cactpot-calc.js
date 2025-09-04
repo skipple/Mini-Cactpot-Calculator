@@ -1,8 +1,101 @@
 // Runs after the page loads
 window.addEventListener("DOMContentLoaded", () => {
-  const button = document.getElementById("calculate-btn");
-  button.addEventListener("click", handleCalculate);
+  const resetButton = document.getElementById("reset-btn");
+  resetButton.addEventListener("click", handleReset);
+  
+  // Add event listeners to all number inputs to toggle background image and validate input
+  for (let i = 1; i <= 9; i++) {
+    const input = document.getElementById(`num-${i}-entry`);
+    input.addEventListener('input', handleCalculate);
+    input.addEventListener('input', toggleBackgroundImage);
+    input.addEventListener('input', validateInput);
+  }
 });
+
+function toggleBackgroundImage(event) {
+  const input = event.target;
+  if (input.value.trim() !== '') {
+    input.classList.add('filled');
+  } else {
+    input.classList.remove('filled');
+  }
+  
+  // Check field count and manage input states when fields are cleared
+  manageInputStates();
+}
+
+function validateInput(event) {
+  const input = event.target;
+  let value = input.value;
+  
+  // Remove any non-digit characters
+  value = value.replace(/[^0-9]/g, '');
+  
+  // If value is not empty, ensure it's between 1-9
+  if (value !== '') {
+    const numValue = parseInt(value, 10);
+    if (numValue < 1 || numValue > 9) {
+      // If the number is outside 1-9 range, clear the input
+      value = '';
+    } else {
+      // Ensure we only keep the valid number
+      value = numValue.toString();
+    }
+  }
+  
+  // Update the input value if it changed
+  if (input.value !== value) {
+    input.value = value;
+  }
+  
+  // Check field count and manage input states
+  manageInputStates();
+}
+
+function manageInputStates() {
+  // Count filled fields
+  let filledCount = 0;
+  const allInputs = [];
+  
+  for (let i = 1; i <= 9; i++) {
+    const input = document.getElementById(`num-${i}-entry`);
+    allInputs.push(input);
+    if (input.value.trim() !== '') {
+      filledCount++;
+    }
+  }
+  
+  // If 4 fields are filled, disable all empty fields
+  if (filledCount >= 4) {
+    allInputs.forEach(input => {
+      if (input.value.trim() === '') {
+        input.disabled = true;
+        input.classList.add('disabled');
+      }
+    });
+  } else {
+    // If less than 4 fields are filled, enable all fields
+    allInputs.forEach(input => {
+      input.disabled = false;
+      input.classList.remove('disabled');
+    });
+  }
+}
+
+function handleReset() {
+  for (let i = 1; i <= 9; i++) {
+    const input = document.getElementById(`num-${i}-entry`);
+    input.value = '';
+    input.disabled = false;
+    input.classList.remove('disabled');
+    input.classList.remove('filled');
+  }
+  const bestOptionsDiv = document.getElementById("best-options");
+  const expectedValueDiv = document.getElementById("expected-value");
+  bestOptionsDiv.textContent = '';
+  expectedValueDiv.textContent = '';
+  manageInputStates();
+}
 
 
 function handleCalculate() {
@@ -34,8 +127,9 @@ function handleCalculate() {
   const allNumbers = [1,2,3,4,5,6,7,8,9]
   const availableNumbers = allNumbers.filter(item => !takenNumbers.includes(item));
 
-  const resultDiv = document.getElementById("result");
-  resultDiv.textContent = JSON.stringify(optionValues);
+  const bestOptionsDiv = document.getElementById("best-options");
+  const expectedValueDiv = document.getElementById("expected-value");
+  
 
   const evs = optionValues.map(option => calculateOptionEV(option, availableNumbers));
   const maxEV = Math.max(...evs);
@@ -45,7 +139,8 @@ function handleCalculate() {
     .map(item => options[item.index]);
 
   // display the best options and their expected EV
-  resultDiv.textContent = `Best Options: ${JSON.stringify(bestOptions)}, Expected EV: ${maxEV.toFixed(2)} gil`;
+  bestOptionsDiv.textContent = `Best Options: ${JSON.stringify(bestOptions)}`;
+  expectedValueDiv.textContent = `Expected Value: ${maxEV.toFixed(0)} gil`;
 
 }
 

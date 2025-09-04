@@ -1,26 +1,140 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background:#666
+}
+
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    flex: 1;
+    padding-top: 5vh;
 }
 
 .header {
     text-align: center;
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 20px;
+    flex: 0 0 auto;
+    margin-bottom: 2vh;
 }
 
-.arrow-header {
+.cacpot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    flex: 3;
+}
+
+.arrow {
     text-align: center;
     font-size: 15px;
+    width: 39px;
+    height: 39px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
 }
 
-input {
-    width: 15px;
+
+.down-arrow {
+    background-image: url('assets/cacpot_arrow_down.png');
+}
+
+.right-arrow {
+    background-image: url('assets/cacpot_arrow_right.png');
+}
+
+.diag-left-arrow {
+    background-image: url('assets/cacpot_arrow_diag_left.png');
+}
+
+.diag-right-arrow {
+    background-image: url('assets/cacpot_arrow_diag_right.png');
+}
+
+.result-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    flex:1;
+    gap: 10px;
+    margin-top: 20px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 350;
     font-size: 20px;
+}
+
+button {
+    font-family: "Oswald", sans-serif;
+    font-weight: 350;
+    font-size: 20px;
+    color: #863030;
+    text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.3), 1px -1px 0 rgba(255, 255, 255, 0.3), -1px 1px 0 rgba(255, 255, 255, 0.3), 1px 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+
+
+input {
+    width: 75px;
+    height: 75px;
+    text-align: center;
+    font-size: 40px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 350;
+    color: #863030;
+    text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.3), 1px -1px 0 rgba(255, 255, 255, 0.3), -1px 1px 0 rgba(255, 255, 255, 0.3), 1px 1px 0 rgba(255, 255, 255, 0.3);
+    background-image: url('assets/hidden_cactpot_node.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
+
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+
+input.filled {
+    background-image: url('assets/shown_cactpot_node.png');
+}
+
+input.disabled {
+    cursor: not-allowed;
+    background-image: url('assets/hidden_cactpot_node.png');
+}
+
+input:disabled {
+    cursor: not-allowed;
+}
+
+footer {
+    padding: 20px;
+    text-align: center;
+    font-family: "Oswald", sans-serif;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 0;
+    line-height: 1.4;
 }
