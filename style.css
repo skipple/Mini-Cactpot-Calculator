@@ -215,11 +215,31 @@ footer {
     border-top: 1px solid #121212;
     background-color: #1b1b1b;
     margin-top: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 footer p {
     margin: 0;
     line-height: 1.4;
+}
+
+.github-link {
+    position: absolute;
+    right: 20px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.github-link img {
+    width: 30px;
+    height: 30px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.github-link:hover img {
+    opacity: 0.8;
 }
 
 #mgp-image {
