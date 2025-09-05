@@ -190,6 +190,12 @@ class UIManager {
       return;
     }
     
+    // Always update cell suggestions when we have 1-3 numbers (but not 4+)
+    if (counter >= 1 && counter < 4) {
+      const board = this.getBoardState();
+      this.updateCellSuggestions(board);
+    }
+    
     if (counter >= this.minimumInputs) {
       this.handleCalculate();
       return;
@@ -229,6 +235,9 @@ class UIManager {
       
       // Display results
       this.displayResults(result);
+      
+      // Clear suggestions when we have 4+ numbers (final decision state)
+      this.clearCellSuggestions();
     } catch (error) {
       console.error('Error during calculation:', error);
       this.displayError('An error occurred during calculation. Please try again.');
@@ -266,6 +275,46 @@ class UIManager {
   }
 
   /**
+   * Update cell suggestions based on current board state
+   * @param {Array} board - Current board state
+   */
+  updateCellSuggestions(board) {
+    console.log('updateCellSuggestions called with board:', board);
+    
+    // Clear all previous suggestions
+    this.clearCellSuggestions();
+    
+    // Get cell suggestions
+    const suggestionResult = findBestCellsToReveal(board);
+    console.log('Suggestion result:', suggestionResult);
+    
+    // Apply suggested class to best cells
+    suggestionResult.bestCells.forEach(cellIndex => {
+      const input = this.inputs[cellIndex];
+      console.log(`Processing cell ${cellIndex}, input:`, input, 'value:', input ? input.value : 'null');
+      if (input && input.value === '') {
+        input.classList.add('suggested');
+        console.log(`Added suggested class to cell ${cellIndex}`);
+      }
+    });
+    
+    console.log('updateCellSuggestions completed');
+  }
+
+  /**
+   * Clear all cell suggestions
+   */
+  clearCellSuggestions() {
+    console.log('Clearing all cell suggestions');
+    this.inputs.forEach((input, index) => {
+      if (input.classList.contains('suggested')) {
+        console.log(`Removing suggested class from cell ${index}`);
+        input.classList.remove('suggested');
+      }
+    });
+  }
+
+  /**
    * Display error message
    * @param {string} message - Error message to display
    */
@@ -274,6 +323,9 @@ class UIManager {
     this.bestOptionsDiv.textContent = '';
     this.expectedValueText.textContent = '';
     this.mgpImage.style.display = 'none';
+    
+    // Clear cell suggestions
+    this.clearCellSuggestions();
     
     // Show error message only in the error-text div
     const errorTextDiv = document.getElementById('error-text');
@@ -296,6 +348,9 @@ class UIManager {
     this.bestOptionsDiv.textContent = '';
     this.expectedValueText.textContent = '';
     this.mgpImage.style.display = 'none';
+    
+    // Clear cell suggestions
+    this.clearCellSuggestions();
     
     // Clear error text as well
     const errorTextDiv = document.getElementById('error-text');

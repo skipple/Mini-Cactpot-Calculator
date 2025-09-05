@@ -118,6 +118,87 @@ function calculateBestOptions(board) {
 }
 
 /**
+ * Calculates the expected value for revealing a specific cell
+ * @param {Array} board - Current board state
+ * @param {number} cellIndex - Index of the cell to reveal (0-8)
+ * @returns {number} Expected value of revealing this cell
+ */
+function calculateCellEV(board, cellIndex) {
+  // If cell is already filled, return 0 (can't reveal it)
+  if (board[cellIndex] !== null) {
+    return 0;
+  }
+
+  // Get available numbers
+  const takenNumbers = board.filter(element => element !== null);
+  const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const availableNumbers = allNumbers.filter(item => !takenNumbers.includes(item));
+
+  let totalEV = 0;
+  let combinationCount = 0;
+
+  // For each possible number that could be in this cell
+  for (const number of availableNumbers) {
+    // Create a new board state with this number in the cell
+    const newBoard = [...board];
+    newBoard[cellIndex] = number;
+    
+    // Calculate the best options for this new state
+    const result = calculateBestOptions(newBoard);
+    totalEV += result.maxEV;
+    combinationCount++;
+  }
+
+  const finalEV = combinationCount > 0 ? totalEV / combinationCount : 0;
+  console.log(`calculateCellEV for cell ${cellIndex}: ${finalEV.toFixed(2)} (${combinationCount} combinations)`);
+  return finalEV;
+}
+
+/**
+ * Finds the best cells to reveal next based on expected value
+ * @param {Array} board - Current board state
+ * @returns {Object} Object containing best cells and their expected values
+ */
+function findBestCellsToReveal(board) {
+  const filledCount = board.filter(element => element !== null).length;
+  console.log('findBestCellsToReveal called with board:', board, 'filledCount:', filledCount);
+  
+  // Only suggest cells if we have 1-3 numbers revealed (not 4, as that's the final state)
+  if (filledCount >= 4) {
+    console.log('4 or more cells filled, no suggestions');
+    return { bestCells: [], maxEV: 0 };
+  }
+
+  const cellEVs = [];
+  
+  // Calculate EV for each empty cell
+  for (let i = 0; i < 9; i++) {
+    if (board[i] === null) {
+      const ev = calculateCellEV(board, i);
+      cellEVs.push({ index: i, ev });
+      console.log(`Cell ${i} EV: ${ev.toFixed(2)}`);
+    }
+  }
+
+  // If no empty cells, return empty result
+  if (cellEVs.length === 0) {
+    console.log('No empty cells found');
+    return { bestCells: [], maxEV: 0 };
+  }
+
+  // Find the maximum EV
+  const maxEV = Math.max(...cellEVs.map(cell => cell.ev));
+  
+  // Get all cells with the maximum EV
+  const bestCells = cellEVs
+    .filter(cell => cell.ev === maxEV)
+    .map(cell => cell.index);
+
+  console.log('Best cells to reveal:', bestCells, 'Max EV:', maxEV.toFixed(2));
+  return { bestCells, maxEV };
+}
+
+/**
  * Formats the best options for display
  * @param {Array} bestOptions - Array of best option indices
  * @param {Array} optionNames - Array of option names
@@ -148,6 +229,8 @@ if (typeof module !== 'undefined' && module.exports) {
     gilValue,
     calculateOptionEV,
     calculateBestOptions,
-    formatBestOptions
+    formatBestOptions,
+    calculateCellEV,
+    findBestCellsToReveal
   };
 }
