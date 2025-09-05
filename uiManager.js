@@ -150,16 +150,46 @@ class UIManager {
    */
   checkNumberInputs() {
     let counter = 0;
+    const filledValues = [];
+    
     this.inputs.forEach(input => {
       if (input.value.trim() !== '') {
         counter++;
+        filledValues.push(parseInt(input.value, 10));
       }
     });
+    
+    // Check for duplicate numbers
+    const duplicates = this.findDuplicates(filledValues);
+    if (duplicates.length > 0) {
+      this.displayError(`Duplicate numbers: ${duplicates.join(', ')}<br>Please remove duplicates.`);
+      return;
+    }
     
     if (counter >= this.minimumInputs) {
       this.handleCalculate();
       return;
     }
+  }
+
+  /**
+   * Find duplicate numbers in an array
+   * @param {Array} values - Array of numbers to check for duplicates
+   * @returns {Array} Array of duplicate numbers found
+   */
+  findDuplicates(values) {
+    const seen = new Set();
+    const duplicates = new Set();
+    
+    values.forEach(value => {
+      if (seen.has(value)) {
+        duplicates.add(value);
+      } else {
+        seen.add(value);
+      }
+    });
+    
+    return Array.from(duplicates);
   }
 
   /**
@@ -202,6 +232,12 @@ class UIManager {
     const formattedOptions = formatBestOptions(result.bestOptions, result.optionNames);
     this.bestOptionsDiv.textContent = `Best Options: ${formattedOptions}`;
     this.expectedValueDiv.textContent = `Expected Value: ${result.maxEV.toFixed(0)} MGP`;
+    
+    // Clear any error messages when showing valid results
+    const errorTextDiv = document.getElementById('error-text');
+    if (errorTextDiv) {
+      errorTextDiv.textContent = '';
+    }
   }
 
   /**
@@ -209,8 +245,15 @@ class UIManager {
    * @param {string} message - Error message to display
    */
   displayError(message) {
-    this.bestOptionsDiv.textContent = message;
+    // Clear the best options and expected value
+    this.bestOptionsDiv.textContent = '';
     this.expectedValueDiv.textContent = '';
+    
+    // Show error message only in the error-text div
+    const errorTextDiv = document.getElementById('error-text');
+    if (errorTextDiv) {
+      errorTextDiv.innerHTML = message;
+    }
   }
 
   /**
@@ -226,6 +269,13 @@ class UIManager {
     
     this.bestOptionsDiv.textContent = '';
     this.expectedValueDiv.textContent = '';
+    
+    // Clear error text as well
+    const errorTextDiv = document.getElementById('error-text');
+    if (errorTextDiv) {
+      errorTextDiv.textContent = '';
+    }
+    
     this.manageInputStates();
   }
 
