@@ -44,6 +44,7 @@ class UIManager {
       input.addEventListener('input', (e) => this.validateInput(e));
       input.addEventListener('keydown', (e) => this.preventInvalidInput(e));
       input.addEventListener('input', () => this.checkNumberInputs());
+      input.addEventListener('click', (e) => this.setCursorToEnd(e));
     });
   }
 
@@ -61,6 +62,19 @@ class UIManager {
 
     // Check field count and manage input states when fields are cleared
     this.manageInputStates();
+  }
+
+  /**
+   * Set cursor position to the end of the input text when clicked
+   * @param {Event} event - The click event
+   */
+  setCursorToEnd(event) {
+    const input = event.target;
+    // Use setTimeout to ensure the cursor is set after the click event is processed
+    setTimeout(() => {
+      const length = input.value.length;
+      input.setSelectionRange(length, length);
+    }, 0);
   }
 
   /**
