@@ -92,16 +92,20 @@ body {
 }
 
 button {
-    font-family: "Oswald", sans-serif;
-    font-weight: 350;
-    font-size: 30px;
-    color: #863030;
-    background-image: url('assets/hidden_cactpot_node.png');
-    text-shadow: -1px -1px 0 rgba(255, 255, 255, 0.3), 1px -1px 0 rgba(255, 255, 255, 0.3), -1px 1px 0 rgba(255, 255, 255, 0.3), 1px 1px 0 rgba(255, 255, 255, 0.3);
-    background-repeat: no-repeat;
+    font-family: "Noto Sans", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: white;
+    padding: 5px 70px;
+    background-image: url('assets/button_texture.png');
+    text-shadow: 0px 2px 0 rgba(0, 0, 0, 0.8);
     background-position: center;
-    border: #b6b6b6;
-    background-color: transparent;
+    background-size: cover;
+    border: rgba(0, 0, 0, 0.668);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 100px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.668)
 }
 
 .num-input {
