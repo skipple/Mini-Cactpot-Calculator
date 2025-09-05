@@ -99,8 +99,16 @@ class UIManager {
     if (value !== '') {
       const numValue = parseInt(value, 10);
       if (numValue < 1 || numValue > 9) {
-        // If the number is outside 1-9 range, clear the input
-        value = '';
+        // If the number is outside 1-9 range, keep only the last valid digit
+        // This allows replacing the current number with a new one
+        const lastChar = value.slice(-1);
+        const lastDigit = parseInt(lastChar, 10);
+        if (lastDigit >= 1 && lastDigit <= 9) {
+          value = lastDigit.toString();
+        } else {
+          // If the last character is also invalid, clear the input
+          value = '';
+        }
       } else {
         // Ensure we only keep the valid number
         value = numValue.toString();
