@@ -132,8 +132,24 @@ button {
     border-width: 1px;
     border-style: solid;
     border-radius: 100px;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.668)
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.668);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
+
+/* Hover effects */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Click effect using :active */
+button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-in-out;
+}
+
+
 
 .num-input {
     padding: 5px;
