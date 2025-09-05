@@ -129,29 +129,77 @@ function calculateCellEV(board, cellIndex) {
     return 0;
   }
 
+  // Calculate baseline expected value
+  const baseline = calculateBestOptions(board).maxEV;
+
   // Get available numbers
   const takenNumbers = board.filter(element => element !== null);
   const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const availableNumbers = allNumbers.filter(item => !takenNumbers.includes(item));
 
-  let totalEV = 0;
-  let combinationCount = 0;
+  // Define which lines each cell participates in
+  const cellLines = {
+    0: [0, 3, 6], // row 1, col 1, diag top-left
+    1: [0, 4],    // row 1, col 2
+    2: [0, 5, 7], // row 1, col 3, diag top-right
+    3: [1, 3],    // row 2, col 1
+    4: [1, 4, 6, 7], // row 2, col 2, both diagonals
+    5: [1, 5],    // row 2, col 3
+    6: [2, 3, 7], // row 3, col 1, diag top-right
+    7: [2, 4],    // row 3, col 2
+    8: [2, 5, 6]  // row 3, col 3, diag top-left
+  };
 
-  // For each possible number that could be in this cell
-  for (const number of availableNumbers) {
-    // Create a new board state with this number in the cell
-    const newBoard = [...board];
-    newBoard[cellIndex] = number;
-    
-    // Calculate the best options for this new state
-    const result = calculateBestOptions(newBoard);
-    totalEV += result.maxEV;
-    combinationCount++;
+  const options = [
+    [0, 1, 2], // row 1
+    [3, 4, 5], // row 2
+    [6, 7, 8], // row 3
+    [0, 3, 6], // col 1
+    [1, 4, 7], // col 2
+    [2, 5, 8], // col 3
+    [0, 4, 8], // diag top-left
+    [2, 4, 6]  // diag top-right
+  ];
+
+  // Calculate EV for all lines upfront
+  const lineEVs = [];
+  for (let i = 0; i < options.length; i++) {
+    const line = options[i];
+    const lineValues = line.map(cellIdx => board[cellIdx]);
+    const lineEV = calculateOptionEV(lineValues, availableNumbers);
+    lineEVs.push(lineEV);
   }
 
-  const finalEV = combinationCount > 0 ? totalEV / combinationCount : 0;
-  console.log(`calculateCellEV for cell ${cellIndex}: ${finalEV.toFixed(2)} (${combinationCount} combinations)`);
-  return finalEV;
+  // Sum the EV of all lines this cell participates in
+  const linesForThisCell = cellLines[cellIndex];
+  let cellScore = 0;
+  for (const lineIndex of linesForThisCell) {
+    cellScore += lineEVs[lineIndex];
+  }
+
+  // Calculate expected gain by comparing to baseline
+  const expectedGain = cellScore - baseline;
+  
+  console.log(`calculateCellEV for cell ${cellIndex}: baseline=${baseline.toFixed(2)}, cellScore=${cellScore.toFixed(2)}, gain=${expectedGain.toFixed(2)}`);
+  return expectedGain;
+} 
+
+/**
+ * Gets the position priority for tie-breaking (higher number = higher priority)
+ * @param {number} cellIndex - Index of the cell (0-8)
+ * @returns {number} Position priority (4=center, 3=corner, 2=edge)
+ */
+function getPositionPriority(cellIndex) {
+  // Center cell (4 lines) gets highest priority
+  if (cellIndex === 4) return 4;
+  
+  // Corner cells (3 lines) get medium priority
+  if ([0, 2, 6, 8].includes(cellIndex)) return 3;
+  
+  // Edge cells (2 lines) get lowest priority
+  if ([1, 3, 5, 7].includes(cellIndex)) return 2;
+  
+  return 1;
 }
 
 /**
@@ -189,9 +237,11 @@ function findBestCellsToReveal(board) {
   // Find the maximum EV
   const maxEV = Math.max(...cellEVs.map(cell => cell.ev));
   
-  // Get all cells with the maximum EV
+  // Get all cells with the maximum EV (within a small epsilon for floating point comparison)
+  const epsilon = 0.01;
   const bestCells = cellEVs
-    .filter(cell => cell.ev === maxEV)
+    .filter(cell => Math.abs(cell.ev - maxEV) < epsilon)
+    .sort((a, b) => getPositionPriority(b.index) - getPositionPriority(a.index)) // Sort by position priority
     .map(cell => cell.index);
 
   console.log('Best cells to reveal:', bestCells, 'Max EV:', maxEV.toFixed(2));
@@ -231,6 +281,7 @@ if (typeof module !== 'undefined' && module.exports) {
     calculateBestOptions,
     formatBestOptions,
     calculateCellEV,
-    findBestCellsToReveal
+    findBestCellsToReveal,
+    getPositionPriority
   };
 }
