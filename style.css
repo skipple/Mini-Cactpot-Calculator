@@ -170,3 +170,10 @@ footer p {
     margin: 0;
     line-height: 1.4;
 }
+
+#mgp-image {
+    height: 1.3em;
+    width: auto;
+    vertical-align: bottom;
+    margin-left: 1px;
+}

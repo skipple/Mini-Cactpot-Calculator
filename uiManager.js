@@ -21,6 +21,8 @@ class UIManager {
     this.resetButton = document.getElementById("reset-btn");
     this.bestOptionsDiv = document.getElementById("best-options");
     this.expectedValueDiv = document.getElementById("expected-value");
+    this.expectedValueText = document.getElementById("expected-value-text");
+    this.mgpImage = document.getElementById("mgp-image");
     this.inputs = [];
     
     // Get all number inputs
@@ -231,7 +233,8 @@ class UIManager {
   displayResults(result) {
     const formattedOptions = formatBestOptions(result.bestOptions, result.optionNames);
     this.bestOptionsDiv.textContent = `Best Options: ${formattedOptions}`;
-    this.expectedValueDiv.textContent = `Expected Value: ${result.maxEV.toFixed(0)} MGP`;
+    this.expectedValueText.textContent = `Expected Value: ${result.maxEV.toFixed(0)} `;
+    this.mgpImage.style.display = 'inline';
     
     // Clear any error messages when showing valid results
     const errorTextDiv = document.getElementById('error-text');
@@ -247,7 +250,8 @@ class UIManager {
   displayError(message) {
     // Clear the best options and expected value
     this.bestOptionsDiv.textContent = '';
-    this.expectedValueDiv.textContent = '';
+    this.expectedValueText.textContent = '';
+    this.mgpImage.style.display = 'none';
     
     // Show error message only in the error-text div
     const errorTextDiv = document.getElementById('error-text');
@@ -268,7 +272,8 @@ class UIManager {
     });
     
     this.bestOptionsDiv.textContent = '';
-    this.expectedValueDiv.textContent = '';
+    this.expectedValueText.textContent = '';
+    this.mgpImage.style.display = 'none';
     
     // Clear error text as well
     const errorTextDiv = document.getElementById('error-text');
