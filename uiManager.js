@@ -37,9 +37,9 @@ class UIManager {
       'column-2': document.getElementById('column-2'),
       'column-3': document.getElementById('column-3'),
       'diag-right': document.getElementById('diag-right'),
-      'row-1': document.getElementById('row-1'),
-      'row-2': document.getElementById('row-2'),
-      'row-3': document.getElementById('row-3')
+      'row-1': document.getElementById('row-1-arrow'),
+      'row-2': document.getElementById('row-2-arrow'),
+      'row-3': document.getElementById('row-3-arrow')
     };
   }
 
