@@ -29,6 +29,18 @@ class UIManager {
     for (let i = 1; i <= 9; i++) {
       this.inputs.push(document.getElementById(`num-${i}-entry`));
     }
+    
+    // Get all arrow elements
+    this.arrows = {
+      'diag-left': document.getElementById('diag-left'),
+      'column-1': document.getElementById('column-1'),
+      'column-2': document.getElementById('column-2'),
+      'column-3': document.getElementById('column-3'),
+      'diag-right': document.getElementById('diag-right'),
+      'row-1': document.getElementById('row-1'),
+      'row-2': document.getElementById('row-2'),
+      'row-3': document.getElementById('row-3')
+    };
   }
 
   /**
@@ -258,6 +270,38 @@ class UIManager {
   }
 
   /**
+   * Map best options to arrow IDs
+   * @param {Array} bestOptions - Array of best option arrays
+   * @returns {Array} Array of arrow IDs that should be highlighted
+   */
+  mapBestOptionsToArrows(bestOptions) {
+    const optionToArrowMap = {
+      // Rows
+      '0,1,2': 'row-1',
+      '3,4,5': 'row-2', 
+      '6,7,8': 'row-3',
+      // Columns
+      '0,3,6': 'column-1',
+      '1,4,7': 'column-2',
+      '2,5,8': 'column-3',
+      // Diagonals
+      '0,4,8': 'diag-left',
+      '2,4,6': 'diag-right'
+    };
+    
+    const suggestedArrows = [];
+    bestOptions.forEach(option => {
+      const optionKey = option.join(',');
+      const arrowId = optionToArrowMap[optionKey];
+      if (arrowId) {
+        suggestedArrows.push(arrowId);
+      }
+    });
+    
+    return suggestedArrows;
+  }
+
+  /**
    * Display calculation results
    * @param {Object} result - Result object from calculateBestOptions
    */
@@ -272,6 +316,40 @@ class UIManager {
     if (errorTextDiv) {
       errorTextDiv.textContent = '';
     }
+    
+    // Highlight suggested arrows
+    this.highlightSuggestedArrows(result.bestOptions);
+  }
+
+  /**
+   * Highlight suggested arrows based on best options
+   * @param {Array} bestOptions - Array of best option arrays
+   */
+  highlightSuggestedArrows(bestOptions) {
+    // Clear all previous arrow suggestions
+    this.clearArrowSuggestions();
+    
+    // Get suggested arrow IDs
+    const suggestedArrowIds = this.mapBestOptionsToArrows(bestOptions);
+    
+    // Add suggested class to the arrows
+    suggestedArrowIds.forEach(arrowId => {
+      const arrow = this.arrows[arrowId];
+      if (arrow) {
+        arrow.classList.add('suggested');
+      }
+    });
+  }
+
+  /**
+   * Clear all arrow suggestions
+   */
+  clearArrowSuggestions() {
+    Object.values(this.arrows).forEach(arrow => {
+      if (arrow) {
+        arrow.classList.remove('suggested');
+      }
+    });
   }
 
   /**
@@ -327,6 +405,9 @@ class UIManager {
     // Clear cell suggestions
     this.clearCellSuggestions();
     
+    // Clear arrow suggestions
+    this.clearArrowSuggestions();
+    
     // Show error message only in the error-text div
     const errorTextDiv = document.getElementById('error-text');
     if (errorTextDiv) {
@@ -351,6 +432,9 @@ class UIManager {
     
     // Clear cell suggestions
     this.clearCellSuggestions();
+    
+    // Clear arrow suggestions
+    this.clearArrowSuggestions();
     
     // Clear error text as well
     const errorTextDiv = document.getElementById('error-text');

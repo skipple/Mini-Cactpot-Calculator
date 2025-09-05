@@ -68,6 +68,26 @@ body {
     outline: none;
 }
 
+.arrow.suggested {
+    position: relative;
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.arrow.suggested::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 10px 2px #68aec5, inset 0 0 20px 5px rgba(104, 174, 197, 0.6), inset 0 0 40px 5px rgba(104, 174, 197, 0.4);
+    pointer-events: none;
+}
+
 
 .down-arrow {
     background-image: url('assets/cacpot_arrow_down.png');
