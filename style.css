@@ -148,6 +148,14 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
+input.suggested {
+    box-shadow: inset 0 0 10px 2px #68aec5, inset 0 0 20px 5px rgba(104, 174, 197, 0.8), inset 0 0 40px 5px rgba(104, 174, 197, 0.6);
+}
+
+input.suggested:focus {
+    box-shadow: inset 0 0 0 3px #863030, inset 0 0 20px 5px rgba(104, 174, 197, 0.8), inset 0 0 40px 5px rgba(104, 174, 197, 0.6);
+    outline: none;
+}
 
 input.filled {
     background-image: url('assets/shown_cactpot_node.png');
