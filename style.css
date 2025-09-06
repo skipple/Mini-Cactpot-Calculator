@@ -23,15 +23,16 @@ body {
     text-align: center;
     font-family: "Oswald", serif;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(14px, 4vw, 20px);
     flex: 0 0 auto;
     color: #2d2d2d;
+    padding: 0 10px;
 }
 
 .header h1 {
     font-family: "Cinzel", sans-serif;
     font-weight: 400;
-    font-size: 50px;
+    font-size: clamp(24px, 8vw, 50px);
     margin: 0 20px;
     text-shadow: 2px 1px 0 rgba(0, 0, 0, 0.2);
 }
@@ -247,4 +248,58 @@ footer p {
     width: auto;
     vertical-align: bottom;
     margin-left: 1px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .body-container {
+        padding-top: 1vh;
+    }
+    
+    .cacpot-container {
+        padding: 1vh 2vh;
+        margin: 0 10px;
+    }
+    
+    .result-container {
+        font-size: clamp(18px, 5vw, 30px);
+        margin-top: 15px;
+    }
+    
+    button {
+        font-size: clamp(16px, 4vw, 20px);
+        padding: 8px 50px;
+    }
+    
+    input {
+        width: clamp(50px, 15vw, 75px);
+        height: clamp(50px, 15vw, 75px);
+        font-size: clamp(24px, 8vw, 40px);
+    }
+    
+    .arrow {
+        width: clamp(30px, 10vw, 39px);
+        height: clamp(30px, 10vw, 39px);
+    }
+    
+    .arrow.suggested::before {
+        width: clamp(30px, 10vw, 39px);
+        height: clamp(30px, 10vw, 39px);
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        margin: 0 10px;
+    }
+    
+    .cacpot-container {
+        padding: 1vh;
+        margin: 0 5px;
+    }
+    
+    .result-container {
+        gap: 8px;
+        margin-top: 10px;
+    }
 }
