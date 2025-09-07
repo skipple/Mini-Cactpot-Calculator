@@ -219,18 +219,21 @@ footer {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-footer p {
+.dislcaimer {
+    display: flex;
     margin: 0;
     line-height: 1.4;
+    margin: auto;
 }
 
-.github-link {
-    position: absolute;
-    right: 20px;
-    transition: opacity 0.2s ease-in-out;
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .github-link img {
